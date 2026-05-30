@@ -1,0 +1,24 @@
+python-datenv, é uma biblioteca para carregar variáveis de ambiente a partir de um arquivo .env
+é ótima para botar no .gitignore e não expor chaves de API, senhas, etc.
+
+é possível botar uma tabela dentro de outra(relacionamento de tabela)
+relação de um para muitos, por exemplo: 1 cliente pode ter várias vendas, porém n é possível uma venda ter vários clientes
+chave estrageira(fore key(FK)) = é uma informação que faz a ligação entre as tabelas, pelo id
+a FK carrega tods as informações da tabelaque contém seu id
+chave estrageira é utilizada para linkar!
+possui vários tipo de relação (1:n, 1:1, n:n)
+
+1:1 = perfil e usuários
+1:n = cliente e vendas
+
+adicione na tabela o id estrangeiro, dps add forekey(adicionar chave estrangeira)
+
+faz um link entre uma coluna qualquer da tabela com o id de outra tabela.
+pode ser feito entre outras infos da tabela
+
+n:n:
+    relação muitos para muitos
+    é preciso de uma terceira tabela para relaciona-la, cujo nome é tabela intermediária
+    necessita do id_n1 e do id_n2(duas chaves estrangeiras), além do proprio id
+    pode ser colocado mais informações além dos 3 id
+    essa relação geralmente é feita no começo da empresa, por isso o pessoal dos dados geralmente trabalha com a manutenção
