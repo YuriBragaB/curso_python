@@ -218,3 +218,6 @@ def coletar_dados_deletar():
     id = input('Digite o ID que você quer atualizar: ')
 
     resposta = supabase.table(tabela_selecionada).select('*').eq('id', id).execute()
+
+
+
