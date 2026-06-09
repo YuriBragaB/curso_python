@@ -205,6 +205,7 @@ def coletar_dados_e_deletar():
         4 : 'banco_servicos_bancarios',
         5 : 'banco_contratacao_de_servicos'
     }
+    
     for chave, valor in tabelas.items():
         print(f'{chave} : {valor}')
 
@@ -217,15 +218,20 @@ def coletar_dados_e_deletar():
             print(f'{chave} : {valor}')
 
         tabela = int(input('\nDigite o número da tabela:\n'))
+
     os.system('cls')
+
     tabela_selecionada = tabelas[tabela]
     resposta = (supabase
                 .table(tabela_selecionada)
                 .select('*')
                 .execute())
+    
     print('-' * 50)
     exibir_resposta(resposta)
+
     id = int(input('\nDigite o id da linha que você deseja deletar:\n'))
+    
     deletar_dados(tabela_selecionada, id)
 
 coletar_dados_e_deletar()
