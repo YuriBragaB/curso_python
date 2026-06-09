@@ -132,7 +132,7 @@ def atualizar_dados(tabela : str, id : int, dados : dict) -> None:
     except Exception as erro: # Exception é a classe pai de quase todos os erros padrão
         print(f'Erro ao atualizar os dados: {erro}')  
  
-def coletar_dados():
+def coletar_dados_e_atualizar():
     print('Selecione a tabela que você deseja inserir:\n')
     tabelas = {
         1 : 'banco_cliente',
@@ -186,7 +186,46 @@ def coletar_dados():
     
     atualizar_dados(tabela_selecionada, id, novos_dados)
 
-coletar_dados()
 
 
+# DELETE
+def deletar_dados(tabela : str, id : int) -> None:
+    try:
+        resposta = supabase.table(tabela).delete().eq('id',id).execute()
+        print('Dados deletados')
+    except Exception as erro: # excepition é a classe pai de diversos erros em python
+        print(f'Erro ao deletar os dados: {erro}')
 
+def coletar_dados_e_deletar():
+    print('Selecione a tabela que você deseja deletar:\n')
+    tabelas = {
+        1 : 'banco_cliente',
+        2 : 'banco_contas_bancarias',
+        3 : 'banco_transacoes',
+        4 : 'banco_servicos_bancarios',
+        5 : 'banco_contratacao_de_servicos'
+    }
+    for chave, valor in tabelas.items():
+        print(f'{chave} : {valor}')
+
+    tabela = int(input('\nDigite o número da tabela:\n'))
+    while tabela not in [1, 2, 3, 4, 5]:
+        os.system('cls')
+        print('Digite um número válido!\n')
+
+        for chave, valor in tabelas.items():
+            print(f'{chave} : {valor}')
+
+        tabela = int(input('\nDigite o número da tabela:\n'))
+    os.system('cls')
+    tabela_selecionada = tabelas[tabela]
+    resposta = (supabase
+                .table(tabela_selecionada)
+                .select('*')
+                .execute())
+    print('-' * 50)
+    exibir_resposta(resposta)
+    id = int(input('\nDigite o id da linha que você deseja deletar:\n'))
+    deletar_dados(tabela_selecionada, id)
+
+coletar_dados_e_deletar()
