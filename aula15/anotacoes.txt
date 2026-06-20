@@ -1,0 +1,5 @@
+query strings, são strings de pesquisa
+o google utiliza query strings
+para pesquisar mais se utiliza o & 
+ex: 
+    ano&quantidade
