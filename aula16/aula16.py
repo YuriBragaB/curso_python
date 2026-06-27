@@ -4,8 +4,14 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Depends, HTTPException, Body
 from fastapi.security import APIKeyHeader
 import requests
+import jwt
+from datetime import datetime, timedelta, timezone
+from fastapi.security import OAuth2PasswordBearer
 
 load_dotenv()
+
+jwt_secret = os.getenv("JWT_KEY")
+algoritmo = "HS256"
 
 supabase_url = os.getenv('SUPABASE_URL')
 supabase_key = os.getenv('SUPABASE_KEY')
@@ -14,8 +20,57 @@ api_key_correta = os.getenv("API_KEY")
 
 app = FastAPI()
 api_key_header = APIKeyHeader(name = 'api_key')
+auth = OAuth2PasswordBearer(tokenUrl= "login")
+
+
+# função para gerar o token
+def criar_token(dados_usuarios):
+    dados_token = dados_usuarios.copy()
+
+    expiracao = datetime.now() + timedelta(minutes=30)
+
+    dados_token.update({
+        "exp" : expiracao
+    })
+
+    token = jwt.encode(dados_token, jwt_secret, algorithm = algoritmo)
+
+    return token
+
+
+@app.post('/login') 
+def login(dados: dict = Body()):
+    cpf = dados.get("cpf")
+    senha = dados.get("senha")
+
+    try:
+        resposta = (supabase
+                    .table("biblioteca_usuarios")
+                    .select("nome, ativo, tipo")
+                    .eq('cpf', cpf)
+                    .execute())
+        
+        token = criar_token(resposta.data[0])
+
+        return {
+            "access_token" : token,
+            "token_type" : 'bearer'
+        }
+    except Exception:
+        HTTPException(status_code=401, detail='Chave API está errada')
+
+def verificar_token(token: str = Depends(auth)):
+    try:
+        dados_token = jwt.decode(
+            token,
+            jwt_secret,
+            algorithms = algoritmo
+        )
+    except Exception:
+        pass
 
 def verificar_api_key(api_key_recebida: str = Depends(api_key_header)):
+
     if api_key_recebida != api_key_correta:
         raise HTTPException(status_code=401, detail='Chave API está errada')
     return api_key_recebida

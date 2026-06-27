@@ -1,0 +1,5 @@
+Depends() é utilizado para verificar a chave de API
+JWT -> login
+JWT = json web token
+JWT -> é utilizada para dados + senha + código
+pip freeze > ./requirements.txt -> bota o pip freeze direto para o requirements.txt, direto pelo terminal
